@@ -1,6 +1,7 @@
 using APIMeteo.Infrastructure.Database;
 using APIMeteo.Infrastructure.Datalayers;
 using APIMeteo.Interfaces.DataLayers;
+using APIMeteo.Models;
 using APIMeteo.Models.Internal;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,15 +31,20 @@ try
     configAPI = _configuration.GetSection("ConfigAPI").Get<ConfigAPI>();
 
     builder.Services.AddScoped<IRoomDatalayer, RoomDatalayer>();
+    builder.Services.AddScoped<IMeasuresDatalayer, MeasureDataLayer>();
+    builder.Services.AddScoped<IAlertDatalayer, AlertDatalayer>();
 
     builder.Services.AddDbContextPool<EntityFrameworkDbContext>(options =>
     {
         options.UseNpgsql(configAPI.SqlConnexion);
+        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     });
 
     builder.Services.Configure<ConfigAPI>(x => x.SqlConnexion = configAPI.SqlConnexion);
 
     var app = builder.Build();
+
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     app.MapGet("/Alive", () => "I'm alive!");
 

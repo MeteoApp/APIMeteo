@@ -8,7 +8,7 @@ namespace APIMeteo.Interfaces.DataLayers
         /// Gets all measures.
         /// </summary>
         /// <returns>A collection of measures.</returns>
-        Task<IEnumerable<Measure>> GetAllMeasures();
+        Task<List<Measure>> GetAllMeasures();
 
         /// <summary>
         /// Gets a measure by its identifier.
@@ -16,6 +16,19 @@ namespace APIMeteo.Interfaces.DataLayers
         /// <param name="id">The measure identifier.</param>
         /// <returns>The measure with the specified identifier.</returns>
         Task<Measure> GetMeasureById(int id);
+
+        /// <summary>
+        /// Gets all measures for a room.
+        /// </summary>
+        /// <param name="roomId">The room identifier.</param>
+        /// <returns>A collection of measures for the specified room.</returns>
+        Task<List<Measure>> GetMeasuresByRoom(int roomId);
+
+        /// <summary>
+        /// Gets the last measure in each room.
+        /// </summary>
+        /// <returns>Last measure each room</returns>
+        Task<List<Measure>> GetLastMeasureInRoom();
 
         /// <summary>
         /// Creates a new measure.

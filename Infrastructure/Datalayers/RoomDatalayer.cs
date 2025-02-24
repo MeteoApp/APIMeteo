@@ -48,6 +48,11 @@ namespace APIMeteo.Infrastructure.Datalayers
 
             try
             {
+                if (await _context.Measures.Where(item => item.Room.RoomId == id).AnyAsync())
+                {
+                    throw new Exception("Impossible de supprimer la pièce car des mesures sont associées à cette pièce.");
+                }
+
                 if (await _context.Rooms.Where(item => item.RoomId == id).AnyAsync())
                 {
                     Room roomBDD = await _context.Rooms.Where(x => x.RoomId == id).SingleAsync();
@@ -116,7 +121,7 @@ namespace APIMeteo.Infrastructure.Datalayers
             }
         }
 
-        public async Task<IEnumerable<Room>> GetAllRooms()
+        public async Task<List<Room>> GetAllRooms()
         {
             return await _context.Rooms.ToListAsync();
         }
